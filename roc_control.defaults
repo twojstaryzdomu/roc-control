@@ -1,0 +1,17 @@
+REMOTE_HOST=${1:-${REMOTE_HOST}}
+REMOTE_USER=${2:-${REMOTE_USER}}
+SUDO_REMOTE_USER=${3:-${SUDO_REMOTE_USER}}
+PACONFIG=${4:-~/.config/pulse/default.pa}
+DELAY=${DELAY:-5}
+MODULE="${MODULE:-module-roc-sink}"
+MODULE_ARGS="${MODULE} remote_ip="
+PCRE_MODULE_ARGS="(?<=${MODULE}\sremote_ip=)((0*(25[0-5]|2[0-4][0-9]{1}|1?[0-9]{2}|[0-9])\.){3}0*(25[0-5]|2[0-4][0-9]{1}|1?[0-9]{2}|[0-9])?)"
+REMOTE_MODULE="${REMOTE_MODULE:-module-roc-sink-input}"
+REMOTE_CMD="${REMOTE_CMD:-timeout --preserve-status ${DELAY} ssh ${SSH_OPTS} ${REMOTE_USER}@${REMOTE_HOST} ${SUDO_REMOTE_USER:+sudo -u ${SUDO_REMOTE_USER}} ${REMOTE_VARS}}"
+CMD="/usr/bin/pactl"
+PACMD="/usr/bin/pacmd"
+CMD_REDIRECT='2>/dev/null'
+START_LOCAL="${START_LOCAL:-systemctl --user start pulseaudio.socket}"
+START_REMOTE="${START_REMOTE:-systemctl --user start pulseaudio.socket}"
+VOLUME_FILE=${XDG_RUNTIME_DIR}/.roc
+DEFAULT_TARGETS="local remote"
